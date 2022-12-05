@@ -1,72 +1,102 @@
-// import './css/styles.css';
-// import { fetchCountries } from './fetchCountries';
-// import debounce from 'lodash.debounce';
-// import Notiflix from 'notiflix';
+import './css/styles.css';
+import Notiflix from 'notiflix';
+import FetchApiService from './js/fetchPics';
 
-// const DEBOUNCE_DELAY = 300;
-// const inputCountry = document.querySelector('#search-box');
-// const countryList = document.querySelector('.country-list');
-// const countryInfo = document.querySelector('.country-info');
+const form = document.querySelector('#search-form');
+const gallery = document.querySelector('.gallery');
+const loadMoreBtn = document.querySelector('.load-more');
 
-// inputCountry.addEventListener('input', debounce(onType, DEBOUNCE_DELAY));
+const fetchApiService = new FetchApiService();
 
-// function onType(e) {
-//   const inputValue = e.target.value.trim();
+let imgShowed = 0;
+loadMoreBtn.style.display = 'none';
 
-//   if (!inputValue) {
-//     countryList.innerHTML = '';
-//     countryInfo.innerHTML = '';
-//     return;
-//   }
+form.addEventListener('submit', onSubmit);
+loadMoreBtn.addEventListener('click', onLoadMore);
 
-//   fetchCountries(inputValue).then(data => {
-//     countryList.innerHTML = '';
-//     countryInfo.innerHTML = '';
+function onSubmit(e) {
+  e.preventDefault();
 
-//     if (data.length > 10) {
-//       Notiflix.Notify.info(
-//         'Too many matches found. Please enter a more specific name.'
-//       );
-//       return;
-//     }
+  gallery.innerHTML = '';
 
-//     if (data.length >= 2 && data.length <= 10) {
-//       countryList.innerHTML = creatMarkUpList(data);
-//       return;
-//     } else {
-//       countryInfo.innerHTML = creatMarkUpInfo(data);
-//     }
-//   });
-// }
+  imgShowed = 0;
 
-// function creatMarkUpList(arr) {
-//   return arr
-//     .map(
-//       ({ flags, name }) =>
-//         `<li class="country-item">
-//     <img src="${flags.svg}" alt="${name.official}" width="20" height="20"/>
-//     <p class="country-name">${name.official}</p>
-//   </li>`
-//     )
-//     .join('');
-// }
+  fetchApiService.resetPage();
 
-// function creatMarkUpInfo(arr) {
-//   return arr
-//     .map(
-//       ({ name, flags, capital, population, languages }) => `
-//     <div class="country-wrap">
-//      <img src="${flags.svg}" alt="${name.official}" width="40" height="30">
-//     <h2>${name.official}</h2>
-//     </div>
-//       <ul class="country-list-info">
-//         <li><span class="country-item-info">Capital:</span> ${capital}</li>
-//         <li><span class="country-item-info">Population:</span> ${population}</li>
-//         <li><span class="country-item-info">Languages:</span> ${Object.values(
-//           languages
-//         )}</li>
-//       </ul>
-//     `
-//     )
-//     .join('');
-// }
+  fetchApiService.query = e.currentTarget.elements.searchQuery.value.trim();
+
+  if (!fetchApiService.query) {
+    Notiflix.Notify.info('Empty request, please type not only spaces');
+    return;
+  }
+
+  fetchImages();
+}
+
+async function fetchImages() {
+  try {
+    const { hits, totalHits } = await fetchApiService.fetchImages();
+
+    if (!hits.length) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
+
+    createMarkUpPics(hits);
+
+    imgShowed += hits.length;
+
+    if (imgShowed === totalHits) {
+      loadMoreBtn.style.display = 'none';
+      Notiflix.Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
+
+    loadMoreBtn.style.display = 'block';
+  } catch (error) {
+    Notiflix.Notify.failure(`${error}`);
+  }
+}
+
+function onLoadMore(e) {
+  fetchImages();
+}
+
+function createMarkUpPics(arr) {
+  const markup = arr
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return `<div class="photo-card"><a href="${largeImageURL}">
+  <img src="${webformatURL}" alt="${tags}" loading="lazy"/></a>
+  <div class="info">
+    <p class="info-item">
+      <b>Likes ${likes}</b>
+    </p>
+    <p class="info-item">
+      <b>Views ${views}</b>
+    </p>
+    <p class="info-item">
+      <b>Comments ${comments}</b>
+    </p>
+    <p class="info-item">
+      <b>Downloads ${downloads}</b>
+    </p>
+  </div>
+</div>`;
+      }
+    )
+    .join(' ');
+
+  gallery.insertAdjacentHTML('beforeend', markup);
+}

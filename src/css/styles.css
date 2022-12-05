@@ -20,26 +20,10 @@ body {
   margin-bottom: 16px;
 }
 
-.country-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.load-more {
+  margin-top: 10px;
 }
 
-.country-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.country-list-info {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  list-style: none;
-  padding: 0;
-}
-
-.country-item-info {
-  font-weight: bold;
+.load-more.is-hidden {
+  display: none;
 }
