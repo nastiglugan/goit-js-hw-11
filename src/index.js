@@ -48,9 +48,11 @@ async function fetchImages() {
 
     imgShowed += hits.length;
 
+    Notiflix.Notify.success(`Hooray! We found ${imgShowed} images.`);
+
     if (imgShowed === totalHits) {
       loadMoreBtn.style.display = 'none';
-      Notiflix.Notiflix.Notify.info(
+      Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."
       );
     }
