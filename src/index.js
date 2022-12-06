@@ -49,6 +49,9 @@ async function fetchImages() {
     Notiflix.Notify.success(`Hooray! We found ${imgShowed} images.`);
 
     imgShowed += hits.length;
+    console.log(imgShowed);
+    console.log(totalHits);
+    console.log((imgShowed += hits.length));
 
     if (imgShowed === totalHits) {
       loadMoreBtn.style.display = 'none';
