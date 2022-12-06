@@ -52,6 +52,7 @@ async function fetchImages() {
     console.log(imgShowed);
     console.log(totalHits);
     console.log((imgShowed += hits.length));
+    console.log();
 
     if (imgShowed === totalHits) {
       loadMoreBtn.style.display = 'none';
