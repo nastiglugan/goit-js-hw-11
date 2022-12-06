@@ -43,6 +43,7 @@ async function fetchImages() {
       );
       return;
     }
+    loadMoreBtn.style.display = 'none';
 
     createMarkUpPics(hits);
 
