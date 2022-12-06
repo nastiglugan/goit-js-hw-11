@@ -52,7 +52,11 @@ async function fetchImages() {
     console.log(imgShowed);
     console.log(totalHits);
 
-    if (imgShowed === totalHits) {
+    if (imgShowed < totalHits) {
+      Notiflix.Notify.success(`Hooray! We found ${imgShowed} images.`);
+    }
+
+    if (imgShowed >= totalHits) {
       loadMoreBtn.style.display = 'none';
       Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."
