@@ -43,13 +43,12 @@ async function fetchImages() {
       );
       return;
     }
-    loadMoreBtn.style.display = 'none';
 
     createMarkUpPics(hits);
 
-    imgShowed += hits.length;
-
     Notiflix.Notify.success(`Hooray! We found ${imgShowed} images.`);
+
+    imgShowed += hits.length;
 
     if (imgShowed === totalHits) {
       loadMoreBtn.style.display = 'none';
