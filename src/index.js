@@ -46,8 +46,6 @@ async function fetchImages() {
 
     createMarkUpPics(hits);
 
-    Notiflix.Notify.success(`Hooray! We found ${imgShowed} images.`);
-
     imgShowed += hits.length;
     console.log(imgShowed);
     console.log(totalHits);
@@ -56,14 +54,14 @@ async function fetchImages() {
       Notiflix.Notify.success(`Hooray! We found ${imgShowed} images.`);
     }
 
+    loadMoreBtn.style.display = 'block';
+
     if (imgShowed >= totalHits) {
       loadMoreBtn.style.display = 'none';
       Notiflix.Notify.info(
         "We're sorry, but you've reached the end of search results."
       );
     }
-
-    loadMoreBtn.style.display = 'block';
   } catch (error) {
     Notiflix.Notify.failure(`${error}`);
   }
