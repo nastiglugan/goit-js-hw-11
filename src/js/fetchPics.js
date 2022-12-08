@@ -5,7 +5,7 @@ export default class FetchApiService {
   constructor() {
     this.seachQuery = '';
     this.page = 1;
-    this.perPage = 40;
+    this.perPage = 4;
   }
   async fetchImages() {
     const BASE_URL = `https://pixabay.com/api/`;

@@ -21,6 +21,8 @@ function onSubmit(e) {
 
   imgShowed = 0;
 
+  loadMoreBtn.style.display = 'none';
+
   fetchApiService.resetPage();
 
   fetchApiService.query = e.currentTarget.elements.searchQuery.value.trim();
